@@ -7,6 +7,35 @@ from progress.spinner import Spinner
 def import_all(src):
     return np.genfromtxt(src, delimiter=',')
 
+def import_all_separately(src):
+    pos = 1
+    neg = -1
+    
+    data_pos = []
+    data_neg = []
+    
+    print('Loading dataset...')
+    start = time.time()
+    data_import = np.genfromtxt(src, delimiter=',')
+    end = time.time()
+    print("Dataset imported in: %.2f seconds" % (end - start))
+    
+    print('Filtering only positive datas...')
+    start = time.time()
+    for data in data_import:
+        if(int(data[-1]) == pos): data_pos.append(data)
+    end = time.time()
+    print("Finshed in: %.2f seconds" % (end - start))
+
+    print('Filtering only negative datas...')
+    start = time.time()
+    for data in data_import:
+        if(int(data[-1]) == neg): data_neg.append(data)
+    end = time.time()
+    print("Finshed in: %.2f seconds" % (end - start))
+    
+    return [np.array(data_pos), np.array(data_neg)]
+
 def import_only_from(src, target):
     target = int(target)
     data_target = []

@@ -12,15 +12,20 @@ from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 
 def run(data_class, out_class=[]):
+    has_out = np.any(out_class)
     start = time.time()
     
+    print('Target data shape: (%d,%d)' % (data_class.shape[0], data_class.shape[1]) )
     X = np.delete(data_class, -1, axis=1)
     y = data_class[:,-1]
+    print(y)
 
-    if(np.any(out_class)):
-        print('has out class')
+    if(has_out):
+        print('Has out class')
+        print('Out data shape: (%d,%d)' % (out_class.shape[0], out_class.shape[1]) )
         X_out = np.delete(out_class, -1, axis=1)
         y_out = out_class[:,-1]
+        print(y_out)
 
     print(data_class.shape, X.shape, y.shape)
 
@@ -50,38 +55,41 @@ def run(data_class, out_class=[]):
         y_train, y_test = y[train_index], y[test_index]
 
         # Fazer o append de dados da outra classe no X_test y_test
-        if(np.any(out_class)):
-           np.concatenate((X_test, X_out)) 
-           np.concatenate((y_test, y_out)) 
+        if(has_out):
+           X_test = np.concatenate((X_test, X_out)) 
+           y_test = np.concatenate((y_test, y_out)) 
 
-        clf = clf.fit(X_train, y_train)
-        y_pred_train = clf.predict(X_train)
+        clf = clf.fit(X_train)
+        # y_pred_train = clf.predict(X_train)
         y_pred_test = clf.predict(X_test)
 
         # print(set(y_train) - set(y_pred_train))
         # print(set(y_test) - set(y_pred_test))
 
-        n_error_train = (y_pred_train != y_train).sum()
+        print(y_test)
+        print(y_pred_test)
+
+        # n_error_train = (y_pred_train != y_train).sum()
         n_error_test = (y_pred_test != y_test).sum()
         
-        f1_train_score = f1_score(y_train, y_pred_train)
-        f1_test_score = f1_score(y_test, y_pred_test)
+        # f1_train_score = f1_score(y_train, y_pred_train, pos_label=-1)
+        f1_test_score = f1_score(y_test, y_pred_test, pos_label=-1)
         
-        precision_train_score = precision_score(y_train, y_pred_train)
+        # precision_train_score = precision_score(y_train, y_pred_train)
         precision_test_score = precision_score(y_test, y_pred_test)
 
-        recall_train_score = recall_score(y_train, y_pred_train)
+        # recall_train_score = recall_score(y_train, y_pred_train)
         recall_test_score = recall_score(y_test, y_pred_test)
 
         print("\n=============ITERATION SCORES=============\n")
 
-        print("Train error: {:d}".format(n_error_train))
+        # print("Train error: {:d}".format(n_error_train))
         print("Test error: {:d}".format(n_error_test))
-        print('Train F1 Score: %.3f' % f1_train_score)
+        # print('Train F1 Score: %.3f' % f1_train_score)
         print('Test F1 Score: %.3f' % f1_test_score)
-        print('Train Precision Score: %.3f' % precision_train_score)
+        # print('Train Precision Score: %.3f' % precision_train_score)
         print('Test Precision Score: %.3f' % precision_test_score)
-        print('Train Recall Score: %.3f' % recall_train_score)
+        # print('Train Recall Score: %.3f' % recall_train_score)
         print('Test Recall Score: %.3f' % recall_test_score)
 
         f1_scores.append(f1_test_score)
