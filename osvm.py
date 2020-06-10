@@ -4,6 +4,7 @@ warnings.filterwarnings('always')
 import time
 import numpy as np
 import scipy.stats as stats
+from printer import Printer
 from sklearn.model_selection import KFold
 from sklearn.svm import OneClassSVM
 from sklearn.model_selection import RandomizedSearchCV
@@ -11,18 +12,18 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import precision_score
 from sklearn.metrics import recall_score
 
-def run(data_class, out_class=[]):
+def run(data_class, out_class=[], printer=Printer()):
     has_out = np.any(out_class)
     start = time.time()
     
-    print('Target data shape: (%d,%d)' % (data_class.shape[0], data_class.shape[1]) )
+    printer.print_write('Target data shape: (%d,%d)' % (data_class.shape[0], data_class.shape[1]) )
     X = np.delete(data_class, -1, axis=1)
     y = data_class[:,-1]
     print(y)
 
     if(has_out):
-        print('Has out class')
-        print('Out data shape: (%d,%d)' % (out_class.shape[0], out_class.shape[1]) )
+        printer.print_write('Has out class')
+        printer.print_write('Out data shape: (%d,%d)' % (out_class.shape[0], out_class.shape[1]) )
         X_out = np.delete(out_class, -1, axis=1)
         y_out = out_class[:,-1]
         print(y_out)
@@ -81,16 +82,16 @@ def run(data_class, out_class=[]):
         # recall_train_score = recall_score(y_train, y_pred_train)
         recall_test_score = recall_score(y_test, y_pred_test)
 
-        print("\n=============ITERATION SCORES=============\n")
+        printer.print_write("\n=============ITERATION SCORES=============\n")
 
         # print("Train error: {:d}".format(n_error_train))
-        print("Test error: {:d}".format(n_error_test))
+        printer.print_write("Test error: {:d}".format(n_error_test))
         # print('Train F1 Score: %.3f' % f1_train_score)
-        print('Test F1 Score: %.3f' % f1_test_score)
+        printer.print_write('Test F1 Score: %.3f' % f1_test_score)
         # print('Train Precision Score: %.3f' % precision_train_score)
-        print('Test Precision Score: %.3f' % precision_test_score)
+        printer.print_write('Test Precision Score: %.3f' % precision_test_score)
         # print('Train Recall Score: %.3f' % recall_train_score)
-        print('Test Recall Score: %.3f' % recall_test_score)
+        printer.print_write('Test Recall Score: %.3f' % recall_test_score)
 
         f1_scores.append(f1_test_score)
         precision_scores.append(precision_test_score)
@@ -100,10 +101,10 @@ def run(data_class, out_class=[]):
     precision_scores = np.array(precision_scores)
     recall_scores = np.array(recall_scores)
 
-    print("\n=============FINAL SCORES=============\n")
-    print("F1 Score Final: %f" % (f1_scores.sum()/f1_scores.size))
-    print("Precision Score Final: %f" % (precision_scores.sum()/precision_scores.size))
-    print("Recall Score Final: %f" % (recall_scores.sum()/recall_scores.size))
+    printer.print_write("\n=============FINAL SCORES=============\n")
+    printer.print_write("F1 Score Final: %f" % (f1_scores.sum()/f1_scores.size))
+    printer.print_write("Precision Score Final: %f" % (precision_scores.sum()/precision_scores.size))
+    printer.print_write("Recall Score Final: %f" % (recall_scores.sum()/recall_scores.size))
 
     end = time.time()
-    print("It took: %.2f seconds" % (end - start))
+    printer.print_write("It took: %.2f seconds" % (end - start))
