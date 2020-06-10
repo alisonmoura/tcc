@@ -90,4 +90,5 @@ def run(data_class, out_class=[], printer=Printer()):
     printer.print_write("Recall Score Final: %f" % (recall_scores.sum()/recall_scores.size))
 
     end = time.time()
-    print("It took: %.2f seconds" % (end - start))
+    printer.print_write("\n=============TIME=============\n")
+    printer.print_write("It took: %.2f seconds" % (end - start))
