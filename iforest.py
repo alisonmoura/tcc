@@ -6,7 +6,7 @@ import numpy as np
 import scipy.stats as stats
 from printer import Printer
 from sklearn.model_selection import KFold
-from sklearn.svm import OneClassSVM
+from sklearn.ensemble import IsolationForest
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import f1_score
 from sklearn.metrics import precision_score
@@ -30,15 +30,23 @@ def run(data_class, out_class=[], printer=Printer()):
 
     print(data_class.shape, X.shape, y.shape)
 
-    clf = OneClassSVM(gamma='scale', nu=0.01)
+    clf = IsolationForest(
+        contamination=0.01, 
+        random_state=0, 
+        n_estimators=100,
+        max_samples='auto',
+        max_features=1.0,
+        bootstrap=False,
+        n_jobs=None,
+        warm_start=False,
+        behaviour='new'
+        )
+    
     kf = KFold(n_splits=5)
     kf.get_n_splits(X)
 
     param_dist = {
-        'kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
-        'gamma': ['scale', 'auto'],
-        'nu': stats.uniform(.0, .99),
-        'shrinking': [True, False]
+        'contamination': stats.uniform(.0, .99),
         }
 
     n_inter = 20
