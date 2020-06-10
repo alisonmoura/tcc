@@ -17,5 +17,6 @@ class Printer:
         file_stream = open(file_path,"a") 
         for line in self.buffer:
             file_stream.writelines(line) 
+            file_stream.writelines('\n') 
         file_stream.close() 
         print("Result saved on {0}".format(os.getcwd() + '/' + file_path))
