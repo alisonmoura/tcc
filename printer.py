@@ -12,6 +12,7 @@ class Printer:
         self.buffer.append(message)
 
     def close_write(self):
+        os.mkdir('results')
         file_name = str(current_milli_time())
         file_path = "results/" + file_name + ".txt"
         file_stream = open(file_path,"a") 
