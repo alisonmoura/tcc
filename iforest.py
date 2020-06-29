@@ -50,7 +50,7 @@ def run(data_class, out_class=[], printer=Printer()):
         }
 
     n_inter = 20
-    # clf = RandomizedSearchCV(clf, param_distributions=param_dist, n_iter=n_inter, cv=5, scoring="accuracy")
+    clf = RandomizedSearchCV(clf, param_distributions=param_dist, n_iter=n_inter, cv=5, scoring="accuracy")
 
     f1_scores = []
     precision_scores = []

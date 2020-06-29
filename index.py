@@ -8,7 +8,7 @@ from printer import Printer
 
 def run_osvm_1():
     print('Iniciando thread 1')
-    printer = Printer()
+    printer = Printer(prefix="osvm-target-")
     start = time.time()
     printer.print_write("\n============================================")
     printer.print_write("Algoritmo: One-Class Support Vector Machine (OSVM)")
@@ -30,7 +30,7 @@ def run_osvm_1():
 
 def run_osvm_2():
     print('Iniciando thread 2')
-    printer = Printer()
+    printer = Printer(prefix="osvm-all-")
     start = time.time()
     printer.print_write("\n============================================")
     printer.print_write("Algoritmo: One-Class Support Vector Machine (OSVM)")
@@ -49,20 +49,28 @@ def run_osvm_2():
     printer.print_write("\nFinalizado em: %.2f segundos" % (end - start))
     printer.close_write()
 
-# # The model is probably best trained on examples that exclude outliers. 
-# # In this case, we fit the model on the input features for examples from the majority class only.
-# printer.print_write("\n============================================")
-# printer.print_write("Algoritmo: Isolation Forest (iForest)")
-# printer.print_write("Dataset: Reviews Polarity")
-# printer.print_write("# total de atributos: 15.697")
-# printer.print_write("# total de exemplos: 2.000")
-# printer.print_write("# de exemplos positivos: 1.000")
-# printer.print_write("# de exemplos negativos: 1.000")
-# printer.print_write("Treino: Apenas com exemplos da classe de interese")
-# printer.print_write("Teste: Com todos os exemplos")
-# printer.print_write("============================================\n")
-# [data_class, out_class] = importer.import_all_separately('datas/review_polarity.csv')
-# iforest.run(data_class, out_class, printer)
+# The model is probably best trained on examples that exclude outliers. 
+# In this case, we fit the model on the input features for examples from the majority class only.
+def run_iforest():
+    print('Iniciando thread 2')
+    printer = Printer(prefix="iforest-")
+    start = time.time()
+    printer.print_write("\n============================================")
+    printer.print_write("Algoritmo: Isolation Forest (iForest)")
+    printer.print_write("Dataset: Reviews Polarity")
+    printer.print_write("# total de atributos: 15.697")
+    printer.print_write("# total de exemplos: 2.000")
+    printer.print_write("# de exemplos positivos: 1.000")
+    printer.print_write("# de exemplos negativos: 1.000")
+    printer.print_write("Treino: Apenas com exemplos da classe de interese")
+    printer.print_write("Teste: Com todos os exemplos")
+    printer.print_write("============================================\n")
+    [data_class, out_class] = importer.import_all_separately('datas/review_polarity.csv')
+    print('iForest Thread: dataset importado')
+    iforest.run(data_class, out_class, printer)
+    end = time.time()
+    printer.print_write("\nFinalizado em: %.2f segundos" % (end - start))
+    printer.close_write()
 
 # # If the input variables have a Gaussian distribution, 
 # # then simple statistical methods can be used to detect outliers.
@@ -87,9 +95,12 @@ def run_osvm_2():
 
 thr_osvm_1 = threading.Thread(target=run_osvm_1, args=(), daemon=True)
 thr_osvm_2 = threading.Thread(target=run_osvm_2, args=(), daemon=True)
+thr_iforest = threading.Thread(target=run_iforest, args=(), daemon=True)
 
 thr_osvm_1.start()
 thr_osvm_2.start()
+thr_iforest.start()
 
 thr_osvm_1.join()
 thr_osvm_2.join()
+thr_iforest.join()
