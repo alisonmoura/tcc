@@ -69,8 +69,8 @@ def run(data_class, out_class=[], printer=Printer()):
         clf = clf.fit(X_train, y_train)
         y_pred_test = clf.predict(X_test)
 
-        print(y_test)
-        print(y_pred_test)
+        # print(y_test)
+        # print(y_pred_test)
 
         n_error_test = (y_pred_test != y_test).sum()
         f1_test_score = f1_score(y_test, y_pred_test, pos_label=-1)
