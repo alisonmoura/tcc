@@ -3,7 +3,10 @@ import os
 
 if not os.path.isdir('dist'):
     os.mkdir('dist')
-    print('Criando diretório do build')
+else: 
+    shutil.rmtree('dist')
+    os.mkdir('dist')
+
 
 shutil.copy('./index.py', './dist/index.py')
 shutil.copy('./printer.py', './dist/printer.py')
