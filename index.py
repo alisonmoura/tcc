@@ -6,7 +6,8 @@ import mcd
 import threading
 from printer import Printer
 
-def run_osvm_1():
+
+def run_osvm_reviews_polarity_target():
     print('Iniciando thread 1')
     printer = Printer(prefix="osvm-target-")
     start = time.time()
@@ -20,15 +21,16 @@ def run_osvm_1():
     printer.print_write("Treino: Apenas com exemplos da classe de interese")
     printer.print_write("Teste: Com todos os exemplos")
     printer.print_write("============================================\n")
-    [data_class, out_class] = importer.import_all_separately('datas/review_polarity.csv')
+    [data_class, out_class] = importer.import_all_separately(
+        'datas/review_polarity.csv')
     print('OSVM Thread 1: dataset importado')
     osvm.run(data_class, out_class, printer)
     end = time.time()
     printer.print_write("\nFinalizado em: %.2f segundos" % (end - start))
     printer.close_write()
-    
 
-def run_osvm_2():
+
+def run_osvm_reviews_polarity_all():
     print('Iniciando thread 2')
     printer = Printer(prefix="osvm-all-")
     start = time.time()
@@ -49,9 +51,8 @@ def run_osvm_2():
     printer.print_write("\nFinalizado em: %.2f segundos" % (end - start))
     printer.close_write()
 
-# The model is probably best trained on examples that exclude outliers. 
-# In this case, we fit the model on the input features for examples from the majority class only.
-def run_iforest():
+
+def run_iforest_reviews_polarity_all():
     print('Iniciando thread 2')
     printer = Printer(prefix="iforest-")
     start = time.time()
@@ -65,20 +66,14 @@ def run_iforest():
     printer.print_write("Treino: Apenas com exemplos da classe de interese")
     printer.print_write("Teste: Com todos os exemplos")
     printer.print_write("============================================\n")
-    [data_class, out_class] = importer.import_all_separately('datas/review_polarity.csv')
+    [data_class, out_class] = importer.import_all_separately(
+        'datas/review_polarity.csv')
     print('iForest Thread: dataset importado')
     iforest.run(data_class, out_class, printer)
     end = time.time()
     printer.print_write("\nFinalizado em: %.2f segundos" % (end - start))
     printer.close_write()
 
-# # If the input variables have a Gaussian distribution, 
-# # then simple statistical methods can be used to detect outliers.
-# # It is unusual to have such well-behaved data, but if this is the case for your dataset, 
-# # or you can use power transforms to make the variables Gaussian, 
-# # then this approach might be appropriate.
-# # The model can be fit on the input data from the majority class only 
-# # in order to estimate the distribution of “normal” data in an unsupervised manner.
 # printer.print_write("\n============================================")
 # printer.print_write("Algoritmo: Minimum Covariance Determinant (MCD)")
 # printer.print_write("Dataset: Reviews Polarity")
@@ -93,14 +88,17 @@ def run_iforest():
 # mcd.run(data_class, out_class, printer)
 
 
-thr_osvm_1 = threading.Thread(target=run_osvm_1, args=(), daemon=True)
-thr_osvm_2 = threading.Thread(target=run_osvm_2, args=(), daemon=True)
-thr_iforest = threading.Thread(target=run_iforest, args=(), daemon=True)
+thread_osvm_reviews_polarity_target = threading.Thread(
+    target=run_osvm_reviews_polarity_target, args=(), daemon=True)
+thread_osvm_reviews_polarity_all = threading.Thread(
+    target=run_osvm_reviews_polarity_all, args=(), daemon=True)
+thread_iforest_reviews_polarity_all = threading.Thread(
+    target=run_iforest_reviews_polarity_all, args=(), daemon=True)
 
-thr_osvm_1.start()
-thr_osvm_2.start()
-thr_iforest.start()
+thread_osvm_reviews_polarity_target.start()
+thread_osvm_reviews_polarity_all.start()
+thread_iforest_reviews_polarity_all.start()
 
-thr_osvm_1.join()
-thr_osvm_2.join()
-thr_iforest.join()
+thread_osvm_reviews_polarity_target.join()
+thread_osvm_reviews_polarity_all.join()
+thread_iforest_reviews_polarity_all.join()
