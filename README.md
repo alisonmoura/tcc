@@ -10,6 +10,8 @@ https://stackoverflow.com/questions/28863944/scikit-learn-typeerror-if-no-scorin
 
 https://pypi.org/project/progress/
 
+https://pythonacademy.com.br/blog/python-e-virtualenv-como-programar-em-ambientes-virtuais
+
 ## Últimas Atualizações
 
 ### 2020.05.20-1

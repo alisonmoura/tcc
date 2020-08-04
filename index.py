@@ -4,8 +4,17 @@ import osvm
 import iforest
 import mcd
 import threading
+import numpy as np
 from printer import Printer
 
+print('Carregando datasets')
+start = time.time()
+print('reviews_polarity_all...')
+reviews_polarity_all = importer.import_all('datas/review_polarity.csv')
+print('reviews_polarity_all_separately...')
+reviews_polarity_all_separately = importer.import_all_separately('datas/review_polarity.csv')
+end = time.time()
+print("\nFinalizado em: %.2f segundos" % (end - start))
 
 def run_osvm_reviews_polarity_target():
     print('Iniciando thread 1')
@@ -21,10 +30,7 @@ def run_osvm_reviews_polarity_target():
     printer.print_write("Treino: Apenas com exemplos da classe de interese")
     printer.print_write("Teste: Com todos os exemplos")
     printer.print_write("============================================\n")
-    [data_class, out_class] = importer.import_all_separately(
-        'datas/review_polarity.csv')
-    print('OSVM Thread 1: dataset importado')
-    osvm.run(data_class, out_class, printer)
+    osvm.run(reviews_polarity_all_separately[0], reviews_polarity_all_separately[1], printer)
     end = time.time()
     printer.print_write("\nFinalizado em: %.2f segundos" % (end - start))
     printer.close_write()
@@ -44,9 +50,7 @@ def run_osvm_reviews_polarity_all():
     printer.print_write("Treino: Com todos os exemplos")
     printer.print_write("Teste: Com todos os exemplos")
     printer.print_write("============================================\n")
-    data_class = importer.import_all('datas/review_polarity.csv')
-    print('OSVM Thread 2: dataset importado')
-    osvm.run(data_class, [], printer)
+    osvm.run(reviews_polarity_all, [], printer)
     end = time.time()
     printer.print_write("\nFinalizado em: %.2f segundos" % (end - start))
     printer.close_write()
@@ -66,10 +70,7 @@ def run_iforest_reviews_polarity_all():
     printer.print_write("Treino: Apenas com exemplos da classe de interese")
     printer.print_write("Teste: Com todos os exemplos")
     printer.print_write("============================================\n")
-    [data_class, out_class] = importer.import_all_separately(
-        'datas/review_polarity.csv')
-    print('iForest Thread: dataset importado')
-    iforest.run(data_class, out_class, printer)
+    iforest.run(reviews_polarity_all_separately[0], reviews_polarity_all_separately[1], printer)
     end = time.time()
     printer.print_write("\nFinalizado em: %.2f segundos" % (end - start))
     printer.close_write()

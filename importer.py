@@ -2,10 +2,13 @@ import time
 import numpy as np
 from random import seed
 from random import randint
-from progress.spinner import Spinner
+
+def load_csv(src, delimiter=','):
+    data_text = np.genfromtxt(src, delimiter=delimiter)
+    return data_text
 
 def import_all(src):
-    return np.genfromtxt(src, delimiter=',')
+    return load_csv(src)
 
 def import_all_separately(src):
     pos = 1
@@ -16,7 +19,7 @@ def import_all_separately(src):
     
     print('Loading dataset...')
     start = time.time()
-    data_import = np.genfromtxt(src, delimiter=',')
+    data_import = load_csv(src)
     end = time.time()
     print("Dataset imported in: %.2f seconds" % (end - start))
     
@@ -37,7 +40,7 @@ def import_only_from(src, target):
     
     print('Loading dataset...')
     start = time.time()
-    data_import = np.genfromtxt(src, delimiter=',')
+    data_import = load_csv(src)
     end = time.time()
     print("Dataset imported in: %.2f seconds" % (end - start))
     
@@ -59,7 +62,7 @@ def import_major_and_minor_from(src, major_target, minor_target):
     
     print('Loading dataset...')
     start = time.time()
-    data_import = np.genfromtxt(src, delimiter=',')
+    data_import = load_csv(src)
     end = time.time()
     print("Dataset imported in: %.2f seconds" % (end - start))
     
