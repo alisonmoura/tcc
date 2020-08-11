@@ -12,6 +12,8 @@ https://pypi.org/project/progress/
 
 https://pythonacademy.com.br/blog/python-e-virtualenv-como-programar-em-ambientes-virtuais
 
+https://machinelearningmastery.com/one-class-classification-algorithms/
+
 ## Últimas Atualizações
 
 ### 2020.05.20-1

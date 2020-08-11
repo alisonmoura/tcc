@@ -32,25 +32,25 @@ def run(data_class, out_class=[], printer=Printer()):
 
     clf = IsolationForest(
         contamination=0.01, 
-        random_state=0, 
+        random_state=None, 
         n_estimators=100,
         max_samples='auto',
-        max_features=1.0,
-        bootstrap=False,
-        n_jobs=None,
-        warm_start=False,
-        behaviour='new'
+        n_jobs=None
         )
     
     kf = KFold(n_splits=5)
     kf.get_n_splits(X)
 
     param_dist = {
-        'contamination': stats.uniform(.0, .99),
+        'contamination': stats.uniform(.0, .01),
+        'n_estimators': stats.uniform(10, 5),
+        'bootstrap': [True, False],
+        'max_features': stats.uniform(1, 1),
+        'warm_start': [True, False]
         }
 
     n_inter = 20
-    # clf = RandomizedSearchCV(clf, param_distributions=param_dist, n_iter=n_inter, cv=5, scoring="accuracy")
+    clf = RandomizedSearchCV(clf, param_distributions=param_dist, n_iter=n_inter, cv=5, scoring="accuracy")
 
     f1_scores = []
     precision_scores = []
