@@ -14,6 +14,8 @@ https://pythonacademy.com.br/blog/python-e-virtualenv-como-programar-em-ambiente
 
 https://machinelearningmastery.com/one-class-classification-algorithms/
 
+http://sites.labic.icmc.usp.br/ragero/docs/TR_395.pdf
+
 ## Últimas Atualizações
 
 ### 2020.05.20-1
