@@ -11,11 +11,9 @@ def import_all(src):
     return load_csv(src)
 
 def import_all_separately(src):
-    pos = 1
-    neg = -1
-    
-    data_pos = []
-    data_neg = []
+
+    datas_dict = {}
+    datas_result = []
     
     print('Loading dataset...')
     start = time.time()
@@ -26,13 +24,19 @@ def import_all_separately(src):
     print('Filtering dataset...')
     start = time.time()
     for data in data_import:
-        if(int(data[-1]) == pos): data_pos.append(data)
-    for data in data_import:
-        if(int(data[-1]) == neg): data_neg.append(data)
+        data_label = int(data[-1])
+        if(data_label in datas_dict): datas_dict[data_label].append(data)
+        else: 
+            datas_dict[data_label] = []
+            datas_dict[data_label].append(data)
+
     end = time.time()
     print("Finshed in: %.2f seconds" % (end - start))
+
+    for key in datas_dict:
+        datas_result.append(np.array(datas_dict[key]))
     
-    return [np.array(data_pos), np.array(data_neg)]
+    return datas_result
 
 def import_only_from(src, target):
     target = int(target)
