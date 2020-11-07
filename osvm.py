@@ -42,14 +42,17 @@ def run(data_class, out_class=[], printer=Printer()):
         }
 
     n_inter = 20
-    # clf = RandomizedSearchCV(clf, param_distributions=param_dist, n_iter=n_inter, cv=5, scoring="accuracy")
+    clf = RandomizedSearchCV(clf, param_distributions=param_dist, n_iter=n_inter, cv=5, scoring="accuracy")
 
     f1_scores = []
     precision_scores = []
     recall_scores = []
 
+    run_time_start = time.time()
+
     print(kf)
     for train_index, test_index in kf.split(X):
+        round_time_start = time.time()
         
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
@@ -64,10 +67,12 @@ def run(data_class, out_class=[], printer=Printer()):
         # print(y_test)
         # print(y_pred_test)
 
+        round_time_end = time.time()
         n_error_test = (y_pred_test != y_test).sum()
         f1_test_score = f1_score(y_test, y_pred_test, pos_label=-1)
         precision_test_score = precision_score(y_test, y_pred_test)
         recall_test_score = recall_score(y_test, y_pred_test)
+        #TODO: accuracy
 
         printer.print_write("\n=============ITERATION SCORES=============\n")
 
@@ -75,11 +80,13 @@ def run(data_class, out_class=[], printer=Printer()):
         printer.print_write('Test F1 Score: %.3f' % f1_test_score)
         printer.print_write('Test Precision Score: %.3f' % precision_test_score)
         printer.print_write('Test Recall Score: %.3f' % recall_test_score)
+        printer.print_write("Iteration time: %.2f seconds" % (round_time_end - round_time_start))
 
         f1_scores.append(f1_test_score)
         precision_scores.append(precision_test_score)
         recall_scores.append(recall_test_score)
 
+    run_time_end = time.time()
     f1_scores = np.array(f1_scores)
     precision_scores = np.array(precision_scores)
     recall_scores = np.array(recall_scores)
@@ -88,6 +95,7 @@ def run(data_class, out_class=[], printer=Printer()):
     printer.print_write("F1 Score Final: %f" % (f1_scores.sum()/f1_scores.size))
     printer.print_write("Precision Score Final: %f" % (precision_scores.sum()/precision_scores.size))
     printer.print_write("Recall Score Final: %f" % (recall_scores.sum()/recall_scores.size))
+    printer.print_write("Final time: %.2f seconds" % (run_time_end - run_time_start))
 
     end = time.time()
     printer.print_write("\n=============TIME=============\n")

@@ -12,14 +12,17 @@ print('Importando datasets')
 start = time.time()
 print('reviews_polarity...')
 reviews_polarity = importer.import_all_separately('datas/review_polarity.csv')
+print('multi_domain_sentiment...')
+multi_domain_sentiment = importer.import_all_separately('datas/multi-domain-sentiment.csv')
+print('irish_economic_sentiment...')
+irish_economic_sentiment = importer.import_all_separately('datas/irish-economic-sentiment.csv')
 end = time.time()
-# print('multi_domain_sentiment...')
-# multi_domain_sentiment = importer.import_all_separately('datas/multi-domain-sentiment.csv')
-# end = time.time()
 print("\nImportação do dataset finalizada em: %.2f segundos" % (end - start))
 
-# print(multi_domain_sentiment[:,-1])
-exit()
+# print(irish_economic_sentiment[0][:,-1])
+# print(irish_economic_sentiment[1][:,-1])
+# print(irish_economic_sentiment[2][:,-1])
+# exit()
 
 def sum_instances(a, b):
     result = a.shape[0] + b.shape[0]
@@ -57,15 +60,20 @@ def run_osvm_ova(chunks, dataset_name='unnamed_dataset'):
     printer.print_write("\nFinalizado em: %.2f segundos" % (end - start))
     printer.close_write()
 
-thread_osvm_reviews_polarity_target = threading.Thread(
+thread_osvm_reviews_polarity = threading.Thread(
     target=run_osvm_ova, args=(reviews_polarity, 'reviews_polarity'), daemon=True)
 
-# thread_osvm_multi_domain_sentiment_target = threading.Thread(
-#     target=run_osvm_ova, args=(multi_domain_sentiment, 'multi_domain_sentiment'), daemon=True)
+thread_osvm_multi_domain_sentiment = threading.Thread(
+    target=run_osvm_ova, args=(multi_domain_sentiment, 'multi_domain_sentiment'), daemon=True)
+
+thread_irish_economic_sentiment = threading.Thread(
+    target=run_osvm_ova, args=(irish_economic_sentiment, 'irish_economic_sentiment'), daemon=True)
 
 
-thread_osvm_reviews_polarity_target.start()
-# thread_osvm_multi_domain_sentiment_target.start()
+thread_osvm_reviews_polarity.start()
+thread_osvm_multi_domain_sentiment.start()
+thread_irish_economic_sentiment.start()
 
-thread_osvm_reviews_polarity_target.join()
-# thread_osvm_multi_domain_sentiment_target.join()
+thread_osvm_reviews_polarity.join()
+thread_osvm_multi_domain_sentiment.join()
+thread_irish_economic_sentiment.join()
