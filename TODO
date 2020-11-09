@@ -1,0 +1,3 @@
+[x] Colocar métrica de acurária nos resultados
+[ ] Formatar resultados em tabela (string)
+[ ] Deixar o algoritmo de importação `arfftocsv` genérico conforme as informações do último @ATTRIBUTE
