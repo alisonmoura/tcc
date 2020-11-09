@@ -18,6 +18,8 @@ http://sites.labic.icmc.usp.br/ragero/docs/TR_395.pdf (Cap 2.46)
 
 http://sites.labic.icmc.usp.br/text_collections/
 
+https://pypi.org/project/tabulate/
+
 ## Run em produção
 
 Ativar o virtualenv 

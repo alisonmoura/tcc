@@ -4,6 +4,7 @@
 import time
 import numpy as np
 import scipy.stats as stats
+from tabulate import tabulate
 from printer import Printer
 from sklearn.model_selection import KFold
 from sklearn.svm import OneClassSVM
@@ -78,12 +79,25 @@ def run(data_class, out_class=[], printer=Printer()):
 
         printer.print_write("\n=============ITERATION SCORES=============\n")
 
-        printer.print_write("Test error: {:d}".format(n_error_test))
-        printer.print_write('Test F1 Score: %.3f' % f1_test_score)
-        printer.print_write('Test Precision Score: %.3f' % precision_test_score)
-        printer.print_write('Test Recall Score: %.3f' % recall_test_score)
-        printer.print_write('Test Accuracy Score: %.3f' % accuracy_test_score)
-        printer.print_write("Iteration time: %.2f seconds" % (round_time_end - round_time_start))
+        printer.print_write(tabulate(
+            [
+                ['Metric', 'Value'],
+                ['Test error:', '{:d}'.format(n_error_test)],
+                ['Test F1 Score:', '%.3f' % f1_test_score],
+                ['Test Precision Score:', '%.3f' % precision_test_score],
+                ['Test Recall Score:', '%.3f' % recall_test_score],
+                ['Test Accuracy Score:', '%.3f' % accuracy_test_score],
+                ['Iteration time:', '%.2f seconds' % (round_time_end - round_time_start)],
+            ], 
+            headers="firstrow"
+            ))
+            
+        # printer.print_write("Test error: {:d}".format(n_error_test))
+        # printer.print_write('Test F1 Score: %.3f' % f1_test_score)
+        # printer.print_write('Test Precision Score: %.3f' % precision_test_score)
+        # printer.print_write('Test Recall Score: %.3f' % recall_test_score)
+        # printer.print_write('Test Accuracy Score: %.3f' % accuracy_test_score)
+        # printer.print_write("Iteration time: %.2f seconds" % (round_time_end - round_time_start))
 
         f1_scores.append(f1_test_score)
         precision_scores.append(precision_test_score)

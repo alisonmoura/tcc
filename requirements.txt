@@ -3,3 +3,4 @@ arff
 progress
 scipy
 sklearn
+tabulate
